@@ -12,4 +12,4 @@
 ---
 
 ## 💻 Follow our website rules!
-#$ You need to follow our website rules to not get banned from use.
+- You need to follow our website rules to not get banned from use.
