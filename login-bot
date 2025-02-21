@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Bot OAuth2</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+        }
+        .oauth-button {
+            background-color: #7289da;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .token-form {
+            display: none;
+            margin-top: 20px;
+        }
+        .token-form input {
+            padding: 10px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Authorize Discord Bot</h1>
+        <button class="oauth-button" onclick="authorizeBot()">Authorize</button>
+
+        <div class="token-form" id="tokenForm">
+            <h2>Enter Bot Token</h2>
+            <input type="text" id="botToken" placeholder="Bot Token">
+            <button class="oauth-button" onclick="submitToken()">Submit</button>
+        </div>
+    </div>
+
+    <script>
+        function authorizeBot() {
+            const oauthUrl = 'https://discord.com/oauth2/authorize?client_id=1342506195864522812&response_type=code&redirect_uri=https%3A%2F%2Fnix.repl.co&scope=email+guilds.join+guilds+identify';
+            window.location.href = oauthUrl;
+        }
+
+        function submitToken() {
+            const botToken = document.getElementById('botToken').value;
+            if (botToken) {
+                loginBot(botToken);
+            } else {
+                alert('Please enter a bot token.');
+            }
+        }
+
+        function showTokenForm() {
+            document.getElementById('tokenForm').style.display = 'block';
+        }
+
+        async function loginBot(token) {
+            try {
+                const response = await fetch('/login-bot', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ token })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert('Bot logged in successfully!');
+                } else {
+                    alert('Failed to log in bot.');
+                }
+            } catch (error) {
+                console.error('Error logging in bot:', error);
+                alert('An error occurred while logging in the bot.');
+            }
+        }
+    </script>
+</body>
+</html>
